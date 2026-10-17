@@ -1,0 +1,87 @@
+{
+  "suppressors": {
+    "at": 1786387073652,
+    "total": 181,
+    "images": 174
+  },
+  "holsters": {
+    "at": 1786387220390,
+    "total": 151,
+    "images": 147
+  },
+  "belts": {
+    "at": 1786387313366,
+    "total": 18,
+    "images": 8
+  },
+  "pouches": {
+    "at": 1786387345874,
+    "total": 69,
+    "images": 57
+  },
+  "knives": {
+    "at": 1786387413766,
+    "total": 354,
+    "images": 143
+  },
+  "handheld-lights": {
+    "at": 1786387833767,
+    "total": 45,
+    "images": 41
+  },
+  "plate-carriers": {
+    "at": 1786387904319,
+    "total": 5,
+    "images": 2
+  },
+  "chest-rigs": {
+    "at": 1786387917837,
+    "total": 10,
+    "images": 3
+  },
+  "body-armor": {
+    "at": 1786387940879,
+    "total": 19,
+    "images": 19
+  },
+  "handcuffs": {
+    "at": 1786387955650,
+    "total": 19,
+    "images": 19
+  },
+  "batons": {
+    "at": 1786387964130,
+    "total": 19,
+    "images": 19
+  },
+  "pepper-spray": {
+    "at": 1786387972827,
+    "total": 28,
+    "images": 28
+  },
+  "helmets": {
+    "at": 1786387986447,
+    "total": 9,
+    "images": 3
+  },
+  "helmet-accessories": {
+    "at": 1786388023526,
+    "total": 5,
+    "images": 4
+  },
+  "plate-carrier-components": {
+    "at": 1786388045841,
+    "total": 12,
+    "images": 2
+  },
+  "badges-insignia": {
+    "at": 1786388070518,
+    "total": 7,
+    "images": 7
+  },
+  "gas-masks": {
+    "at": 1786388073384,
+    "total": 3,
+    "images": 3
+  }
+}
