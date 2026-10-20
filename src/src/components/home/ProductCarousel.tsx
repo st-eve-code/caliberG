@@ -16,12 +16,22 @@ type Props = {
 
 export function ProductCarousel({ title, products, href, viewAll, className = "" }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const cardW = 280;
   const gap = 20;
 
   const maxPos = Math.max(0, products.length * (cardW + gap) - gap);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches);
+    update(mq);
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const scrollTo = (dir: 1 | -1) => {
     const el = trackRef.current;
@@ -33,13 +43,13 @@ export function ProductCarousel({ title, products, href, viewAll, className = ""
 
   useEffect(() => {
     const el = trackRef.current;
-    if (!el) return;
+    if (!el || isMobile) return;
     gsap.to(el, {
       x: -pos,
       duration: 0.6,
       ease: "power2.out",
     });
-  }, [pos]);
+  }, [pos, isMobile]);
 
   if (!products.length) return null;
 
@@ -60,9 +70,10 @@ export function ProductCarousel({ title, products, href, viewAll, className = ""
               {viewAll} →
             </Link>
           )}
+          {/* Hide scroll buttons on mobile — touch scroll is used instead */}
           <button
             onClick={() => scrollTo(-1)}
-            className="rounded-full border border-zinc-300 p-2 text-zinc-600 hover:border-brand-700 hover:text-brand-800"
+            className="hidden rounded-full border border-zinc-300 p-2 text-zinc-600 hover:border-brand-700 hover:text-brand-800 md:flex"
             aria-label="Scroll left"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -71,7 +82,7 @@ export function ProductCarousel({ title, products, href, viewAll, className = ""
           </button>
           <button
             onClick={() => scrollTo(1)}
-            className="rounded-full border border-zinc-300 p-2 text-zinc-600 hover:border-brand-700 hover:text-brand-800"
+            className="hidden rounded-full border border-zinc-300 p-2 text-zinc-600 hover:border-brand-700 hover:text-brand-800 md:flex"
             aria-label="Scroll right"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -81,15 +92,31 @@ export function ProductCarousel({ title, products, href, viewAll, className = ""
         </div>
       </div>
 
-      <div className="relative overflow-hidden">
-        <div ref={trackRef} className="flex will-change-transform">
+      {/* Mobile: native horizontal scroll */}
+      {isMobile ? (
+        <div
+          ref={scrollRef}
+          className="flex gap-5 overflow-x-auto pb-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}
+        >
           {products.map((p) => (
-            <div key={p.id} className="shrink-0 pr-5" style={{ width: cardW }}>
+            <div key={p.id} className="shrink-0" style={{ width: cardW }}>
               <ProductCard product={p} />
             </div>
           ))}
         </div>
-      </div>
+      ) : (
+        /* Desktop: GSAP button-driven carousel */
+        <div className="relative overflow-hidden">
+          <div ref={trackRef} className="flex will-change-transform">
+            {products.map((p) => (
+              <div key={p.id} className="shrink-0 pr-5" style={{ width: cardW }}>
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
