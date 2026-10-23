@@ -17,6 +17,18 @@ export const config = {
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "18005550157",
   whatsappLabel: process.env.NEXT_PUBLIC_WHATSAPP_LABEL ?? "Order on WhatsApp",
 
+  payments: {
+    bitcoinAddress: process.env.NEXT_PUBLIC_PAYMENT_BITCOIN_ADDRESS ?? "",
+    bitcoinNetwork:
+      process.env.NEXT_PUBLIC_PAYMENT_BITCOIN_NETWORK ?? "Bitcoin (mainnet)",
+    applePayEmail: process.env.NEXT_PUBLIC_PAYMENT_APPLEPAY_EMAIL ?? "",
+    zelleEmail: process.env.NEXT_PUBLIC_PAYMENT_ZELLE_EMAIL ?? "",
+    zellePhone: process.env.NEXT_PUBLIC_PAYMENT_ZELLE_PHONE ?? "",
+    cashAppTag: process.env.NEXT_PUBLIC_PAYMENT_CASHAPP_TAG ?? "",
+    chimeEmail: process.env.NEXT_PUBLIC_PAYMENT_CHIME_EMAIL ?? "",
+    chimeHandle: process.env.NEXT_PUBLIC_PAYMENT_CHIME_HANDLE ?? "",
+  },
+
   address: {
     line1: process.env.NEXT_PUBLIC_ADDRESS_LINE1 ?? "123 Main Street",
     line2: process.env.NEXT_PUBLIC_ADDRESS_LINE2 ?? "Suite 100",

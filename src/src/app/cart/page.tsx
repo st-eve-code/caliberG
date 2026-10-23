@@ -3,12 +3,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/providers/CartProvider";
+import { useCurrency } from "@/components/providers/CurrencyProvider";
 import { Breadcrumbs } from "@/components/shop/Breadcrumbs";
-import { shippingFor } from "@/lib/receipt";
+import {
+  FREE_SHIPPING_THRESHOLD,
+  shippingFor,
+} from "@/lib/receipt";
+import { convertAmount } from "@/lib/currency";
 
 export default function CartPage() {
   const { items, subtotal, updateQty, removeItem, clear } = useCart();
-  const shipping = shippingFor(subtotal);
+  const { currency, format } = useCurrency();
+  const threshold = convertAmount(FREE_SHIPPING_THRESHOLD, "USD", currency);
+  const shipping = shippingFor(subtotal, threshold);
   const total = subtotal + shipping;
 
   return (
@@ -60,7 +67,7 @@ export default function CartPage() {
                         </button>
                       </div>
                       <span className="text-sm font-bold text-brand-950">
-                        ${(item.price * item.qty).toFixed(2)}
+                        {format(item.price * item.qty, item.currency ?? "USD")}
                       </span>
                     </div>
                     <button
@@ -85,26 +92,30 @@ export default function CartPage() {
             <dl className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-zinc-500">Subtotal</dt>
-                <dd className="font-semibold text-zinc-800">${subtotal.toFixed(2)}</dd>
+                <dd className="font-semibold text-zinc-800">{format(subtotal)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-zinc-500">Shipping</dt>
                 <dd className="font-semibold text-zinc-800">
-                  {shipping === 0 ? <span className="text-green-600">FREE</span> : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? (
+                    <span className="text-green-600">FREE</span>
+                  ) : (
+                    format(shipping)
+                  )}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-zinc-200 pt-3 text-base font-bold text-brand-950">
                 <dt>Total</dt>
-                <dd>${total.toFixed(2)}</dd>
+                <dd>{format(total)}</dd>
               </div>
             </dl>
             <p className="mt-2 text-xs text-zinc-500">
-              {subtotal < 75 && items.length > 0
-                ? `Add $${(75 - subtotal).toFixed(2)} more for FREE shipping.`
+              {subtotal < threshold && items.length > 0
+                ? `Add ${format(threshold - subtotal)} more for FREE shipping.`
                 : "You've unlocked FREE shipping!"}
             </p>
             <Link href="/checkout" className="btn btn-primary mt-4 w-full py-3">
-              Review &amp; Order via WhatsApp
+              Proceed to payment
             </Link>
             <p className="mt-2 text-center text-xs text-zinc-400">
               No online payment — your cart stays saved here until you delete it.

@@ -3,9 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/components/providers/CartProvider";
+import { useCurrency } from "@/components/providers/CurrencyProvider";
 
 export function CartDrawer() {
   const { items, subtotal, count, setOpen, isOpen, updateQty, removeItem } = useCart();
+  const { format } = useCurrency();
 
   return (
     <>
@@ -81,7 +83,7 @@ export function CartDrawer() {
                         </button>
                       </div>
                       <span className="text-sm font-bold text-brand-950">
-                        ${(item.price * item.qty).toFixed(2)}
+                        {format(item.price * item.qty, item.currency ?? "USD")}
                       </span>
                     </div>
                     <button
@@ -101,14 +103,14 @@ export function CartDrawer() {
               </div>
               <div className="mb-4 flex justify-between text-lg font-bold text-brand-950">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{format(subtotal)}</span>
               </div>
               <Link
                 href="/checkout"
                 onClick={() => setOpen(false)}
                 className="btn btn-primary w-full"
               >
-                Review &amp; Order via WhatsApp
+                Proceed to payment
               </Link>
               <Link
                 href="/cart"

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCart } from "@/components/providers/CartProvider";
+import { useCurrency } from "@/components/providers/CurrencyProvider";
 import type { Product } from "@/lib/types";
-import { formatPrice } from "@/lib/data/products";
 
 export function AddToCartButton({
   product,
@@ -14,7 +14,9 @@ export function AddToCartButton({
   showPrice?: boolean;
 }) {
   const { addItem } = useCart();
+  const { format } = useCurrency();
   const price = product.priceMin ?? 0;
+  const currency = product.currency ?? "USD";
 
   return (
     <button
@@ -27,11 +29,14 @@ export function AddToCartButton({
           brand: product.brand,
           image: product.image,
           price,
+          currency,
         })
       }
     >
       <span>Add To Cart</span>
-      {showPrice && price > 0 && <span className="opacity-80">· {formatPrice(product)}</span>}
+      {showPrice && price > 0 && (
+        <span className="opacity-80">· {format(price, currency)}</span>
+      )}
     </button>
   );
 }

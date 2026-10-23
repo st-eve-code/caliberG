@@ -10,11 +10,17 @@ import {
   getProductBySlug,
   getRelated,
   getAllProducts,
-  formatPrice,
 } from "@/lib/data/products";
+import { PriceInline } from "@/components/ui/PriceInline";
+
+const PRERENDER_LIMIT = 500;
+
+export const revalidate = 86400;
 
 export function generateStaticParams() {
-  return getAllProducts().map((p) => ({ slug: p.slug }));
+  return getAllProducts()
+    .slice(0, PRERENDER_LIMIT)
+    .map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -85,7 +91,7 @@ export default async function ProductPage({
             <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
               <Price product={product} size="lg" />
               <p className="mt-1 text-sm text-zinc-500">
-                {formatPrice(product)} · Price per item
+                <PriceInline product={product} /> · Price per item
               </p>
             </div>
 

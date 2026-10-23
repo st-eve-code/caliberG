@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { categories } from "@/lib/data/categories";
-import { getBrands, getAllProducts } from "@/lib/data/products";
-import { PRICE_RANGES, buildQueryString, countForCategory } from "@/lib/filter";
+import { getBrands, getAllProducts, countForCategory } from "@/lib/data/products";
+import { PRICE_RANGES, buildQueryString } from "@/lib/filter";
 import type { Filters } from "@/lib/filter";
 
 export function FilterSidebar({ filters }: { filters: Filters }) {
@@ -12,6 +12,7 @@ export function FilterSidebar({ filters }: { filters: Filters }) {
     const next: Record<string, string | undefined> = { ...filters };
     if (value && next[key] !== value) next[key] = value;
     else delete next[key];
+    delete next.page;
     return buildQueryString(next);
   };
 
@@ -100,6 +101,7 @@ export function FilterSidebar({ filters }: { filters: Filters }) {
                           ...filters,
                           min: String(r.min),
                           max: r.max === 999999 ? "999999" : String(r.max),
+                          page: undefined,
                         })
                   }
                   className={active ? "font-semibold text-brand-800" : "text-zinc-600 hover:text-brand-800"}

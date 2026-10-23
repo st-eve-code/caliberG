@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/shop/Breadcrumbs";
 import { SortBar } from "@/components/shop/SortBar";
 import { ProductGrid } from "@/components/shop/ProductGrid";
+import { Pagination, PAGE_SIZE } from "@/components/shop/Pagination";
 import { getAllProducts } from "@/lib/data/products";
 import { applyFilters, toFilters } from "@/lib/filter";
 
@@ -18,6 +19,13 @@ export default async function SearchPage({
   const results = applyFilters(getAllProducts(), filters);
   const query = filters.q || "";
 
+  const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(filters.page ?? "1", 10) || 1),
+    totalPages
+  );
+  const paged = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   return (
     <div className="container-x py-6">
       <Breadcrumbs crumbs={[{ name: "Search" }]} />
@@ -29,8 +37,14 @@ export default async function SearchPage({
           basePath="/search"
         />
         <div className="mt-5">
-          <ProductGrid products={results} />
+          <ProductGrid products={paged} />
         </div>
+        <Pagination
+          page={page}
+          total={results.length}
+          filters={filters}
+          basePath="/search"
+        />
       </div>
     </div>
   );

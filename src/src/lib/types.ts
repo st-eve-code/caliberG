@@ -1,3 +1,5 @@
+import type { CurrencyCode } from "@/lib/currency";
+
 export type Product = {
   id: string;
   slug: string;
@@ -17,12 +19,21 @@ export type Product = {
   category: CategoryKey;
   subcategory: string;
   kind: "firearm" | "accessory";
+  currency: CurrencyCode;
+  description?: string;
+  oldPrice?: string;
+  legalCategory?: string | null;
+  gtin13?: string | null;
 };
 
 export type CategoryKey =
   | "rifles"
   | "handguns"
   | "shotguns"
+  | "ar15"
+  | "glock"
+  | "blackpowder"
+  | "airguns"
   | "gun_parts"
   | "magazines"
   | "ammunition"
@@ -70,5 +81,6 @@ export type CartItem = {
   brand: string;
   image: string;
   price: number;
+  currency: CurrencyCode;
   qty: number;
 };

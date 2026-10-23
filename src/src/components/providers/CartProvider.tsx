@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import type { CartItem } from "@/lib/types";
+import { convertAmount } from "@/lib/currency";
+import { useCurrency } from "@/components/providers/CurrencyProvider";
 
 const CART_STORAGE_KEY = "guns_cart";
 const EMPTY_CART: CartItem[] = [];
@@ -73,6 +75,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setOpen] = useState(false);
   const items = useSyncExternalStore(subscribe, getSnapshot, () => EMPTY_CART);
+  const { currency } = useCurrency();
 
   const addItem = (item: Omit<CartItem, "qty">) => {
     updateCart((prev) => {
@@ -103,12 +106,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return items.reduce(
       (acc, i) => {
         acc.count += i.qty;
-        acc.subtotal += i.price * i.qty;
+        acc.subtotal += convertAmount(i.price, i.currency ?? "USD", currency) * i.qty;
         return acc;
       },
       { count: 0, subtotal: 0 }
     );
-  }, [items]);
+  }, [items, currency]);
 
   const value = useMemo(
     () => ({

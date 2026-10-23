@@ -1,17 +1,34 @@
 import type { Product, CategoryKey } from "@/lib/types";
+import type { CurrencyCode } from "@/lib/currency";
+import { formatAmount } from "@/lib/currency";
 import raw from "./products.json";
 
 type RawProduct = Product & { category: string };
 
-const products = (raw as { products: RawProduct[] }).products as Product[];
+const products = (raw as { products: RawProduct[] }).products.map((p) => ({
+  ...p,
+  currency: (p.currency ?? "USD") as CurrencyCode,
+}));
+
+const byCategory = new Map<string, Product[]>();
+const bySlug = new Map<string, Product>();
+for (const p of products) {
+  const list = byCategory.get(p.category);
+  if (list) list.push(p);
+  else byCategory.set(p.category, [p]);
+  if (!bySlug.has(p.slug)) bySlug.set(p.slug, p);
+}
 
 export const getAllProducts = (): Product[] => products;
 
 export const getProductsByCategory = (category: string): Product[] =>
-  products.filter((p) => p.category === category);
+  byCategory.get(category) ?? [];
+
+export const countForCategory = (category: string): number =>
+  getProductsByCategory(category).length;
 
 export const getProductBySlug = (slug: string): Product | undefined =>
-  products.find((p) => p.slug === slug);
+  bySlug.get(slug);
 
 export const getFeatured = (n = 12): Product[] =>
   products.filter((p) => p.kind === "firearm").slice(0, n);
@@ -33,8 +50,8 @@ export const getNewArrivals = (n = 12): Product[] =>
     : products.slice(-n).reverse();
 
 export const getRelated = (product: Product, n = 6): Product[] =>
-  products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+  (byCategory.get(product.category) ?? [])
+    .filter((p) => p.id !== product.id)
     .slice(0, n);
 
 export const getBrands = (): string[] =>
@@ -56,11 +73,16 @@ export const searchProducts = (query: string): Product[] => {
 };
 
 export const formatPrice = (product: Product): string => {
+  const currency = product.currency ?? "USD";
   if (product.priceMin == null) return product.price || "N/A";
   if (product.priceMin !== product.priceMax && product.priceMax != null) {
-    return `$${product.priceMin.toFixed(2)} - $${product.priceMax.toFixed(2)}`;
+    return `${formatAmount(product.priceMin, currency, currency)} - ${formatAmount(
+      product.priceMax,
+      currency,
+      currency
+    )}`;
   }
-  return `$${product.priceMin.toFixed(2)}`;
+  return formatAmount(product.priceMin, currency, currency);
 };
 
 export const categoryLabel = (key: CategoryKey): string => {
@@ -68,6 +90,10 @@ export const categoryLabel = (key: CategoryKey): string => {
     rifles: "Rifles",
     handguns: "Handguns",
     shotguns: "Shotguns",
+    ar15: "AR-15",
+    glock: "Glock",
+    blackpowder: "Blackpowder",
+    airguns: "Airguns & Airsoft",
     gun_parts: "Gun Parts",
     magazines: "Magazines",
     ammunition: "Ammunition",

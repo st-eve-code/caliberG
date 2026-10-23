@@ -1,5 +1,5 @@
 import type { Product } from "@/lib/types";
-import { getProductsByCategory } from "@/lib/data/products";
+import { toUSD } from "@/lib/currency";
 
 export type Filters = {
   q?: string;
@@ -11,6 +11,7 @@ export type Filters = {
   min?: string;
   max?: string;
   sort?: string;
+  page?: string;
 };
 
 export const PRICE_RANGES = [
@@ -114,17 +115,25 @@ export function applyFilters(products: Product[], f: Filters): Product[] {
     const min = f.min ? parseFloat(f.min) : 0;
     const max = f.max ? parseFloat(f.max) : Infinity;
     result = result.filter((p) => {
-      const price = p.priceMin ?? 0;
+      const price = toUSD(p.priceMin ?? 0, p.currency ?? "USD");
       return price >= min && price <= max;
     });
   }
 
   switch (f.sort) {
     case "price-asc":
-      result = [...result].sort((a, b) => (a.priceMin ?? 0) - (b.priceMin ?? 0));
+      result = [...result].sort(
+        (a, b) =>
+          toUSD(a.priceMin ?? 0, a.currency ?? "USD") -
+          toUSD(b.priceMin ?? 0, b.currency ?? "USD")
+      );
       break;
     case "price-desc":
-      result = [...result].sort((a, b) => (b.priceMin ?? 0) - (a.priceMin ?? 0));
+      result = [...result].sort(
+        (a, b) =>
+          toUSD(b.priceMin ?? 0, b.currency ?? "USD") -
+          toUSD(a.priceMin ?? 0, a.currency ?? "USD")
+      );
       break;
     case "rating":
       result = [...result].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
@@ -137,10 +146,6 @@ export function applyFilters(products: Product[], f: Filters): Product[] {
   }
 
   return result;
-}
-
-export function countForCategory(category: string): number {
-  return getProductsByCategory(category).length;
 }
 
 export function toFilters(sp: Record<string, string | string[] | undefined>): Filters {
@@ -156,6 +161,7 @@ export function toFilters(sp: Record<string, string | string[] | undefined>): Fi
     min: str(sp.min),
     max: str(sp.max),
     sort: str(sp.sort),
+    page: str(sp.page),
   };
 }
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { navGroups, topNavLinks } from "@/lib/data/categories";
 import { useCart } from "@/components/providers/CartProvider";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { config } from "@/lib/config";
 import logo from "@/app/logo.png";
 
@@ -117,6 +118,7 @@ export function Header() {
         </div>
 
         <div className="ml-auto flex items-center gap-1 md:ml-0">
+          <CurrencySelect className="hidden sm:flex" />
           <Link href="/wishlist" className="hidden items-center gap-2 rounded-md p-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 sm:flex" aria-label="Wishlist">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 000-7.8z" />
@@ -217,7 +219,7 @@ export function Header() {
             </div>
           ))}
 
-          <div className="ml-auto flex shrink-0 items-center">
+          <div className="ml-auto flex shrink-0 items-center gap-3">
             {topNavLinks.map((link) => (
               <Link
                 key={link.name}
@@ -227,6 +229,11 @@ export function Header() {
                 {link.name}
               </Link>
             ))}
+            <CurrencySelect
+              tone="dark"
+              className="border-white/20 bg-white/10 hover:bg-white/20"
+              compact
+            />
           </div>
         </div>
       </nav>
@@ -252,6 +259,9 @@ export function Header() {
             </div>
             <div className="px-4 py-3 md:hidden">
               <SearchBar />
+            </div>
+            <div className="border-b border-zinc-200 px-4 py-3">
+              <CurrencySelect className="w-full justify-between" />
             </div>
             <nav className="flex-1 overflow-y-auto" aria-label="Mobile">
               <ul className="divide-y divide-zinc-100">

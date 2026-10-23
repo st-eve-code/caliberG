@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/shop/Breadcrumbs";
 import { FilterSidebar } from "@/components/shop/FilterSidebar";
 import { SortBar } from "@/components/shop/SortBar";
 import { ProductGrid } from "@/components/shop/ProductGrid";
+import { Pagination, PAGE_SIZE } from "@/components/shop/Pagination";
 import { getAllProducts } from "@/lib/data/products";
 import { applyFilters, toFilters } from "@/lib/filter";
 
@@ -18,6 +19,13 @@ export default async function BrowsePage({
   const filters = toFilters(sp);
 
   const results = applyFilters(getAllProducts(), filters);
+
+  const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const page = Math.min(
+    Math.max(1, Number.parseInt(filters.page ?? "1", 10) || 1),
+    totalPages
+  );
+  const paged = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div className="container-x py-6">
@@ -45,8 +53,14 @@ export default async function BrowsePage({
           </details>
           <SortBar filters={filters} total={results.length} title="All Products" />
           <div className="mt-5">
-            <ProductGrid products={results} />
+            <ProductGrid products={paged} />
           </div>
+          <Pagination
+            page={page}
+            total={results.length}
+            filters={filters}
+            basePath="/browse"
+          />
         </div>
       </div>
     </div>
