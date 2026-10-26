@@ -62,30 +62,21 @@ export default function CheckoutPage() {
             value={paymentMethodId}
             onChange={selectPaymentMethod}
             action={
-              <>
-                <a
-                  href={chatLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-disabled={!paymentMethod}
-                  onClick={(e) => {
-                    if (!paymentMethod) e.preventDefault();
-                  }}
-                  className={`btn w-full justify-center gap-2 py-3 ${
-                    paymentMethod ? "btn-primary" : "btn-outline opacity-60"
-                  }`}
-                >
-                  <WhatsAppIcon />
-                  Proceed to payment
-                </a>
-                <p className="mt-2 text-center text-xs text-zinc-500">
-                  {paymentMethod
-                    ? paymentMethod.flow === "offline"
-                      ? `Pay to the ${paymentMethod.label} details above, then continue here to send your payment screenshot.`
-                      : `Continue in WhatsApp to confirm your order and pay with ${paymentMethod.label}.`
-                    : "Pick a payment method above to continue."}
-                </p>
-              </>
+              <a
+                href={chatLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!paymentMethod}
+                onClick={(e) => {
+                  if (!paymentMethod) e.preventDefault();
+                }}
+                className={`btn w-full justify-center gap-2 py-3 ${
+                  paymentMethod ? "btn-primary" : "btn-outline opacity-60"
+                }`}
+              >
+                <WhatsAppIcon />
+                Proceed to payment
+              </a>
             }
           />
         </div>

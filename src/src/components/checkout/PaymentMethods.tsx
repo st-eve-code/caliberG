@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useSyncExternalStore, useState, type ReactNode } from "react";
 import {
   paymentMethods,
@@ -102,8 +104,23 @@ export function WhatsAppIcon({ size = 18 }: { size?: number }) {
 
 function MethodIcon({ method }: { method: PaymentMethod }) {
   const chip =
-    "flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-sm font-extrabold ring-1 ring-inset";
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-sm font-extrabold ring-1 ring-inset overflow-hidden bg-white";
   const tone = method.tone;
+
+  if (method.logo) {
+    return (
+      <span className={`${chip} ${tone}`} aria-hidden="true">
+        <Image
+          src={method.logo}
+          alt={method.label}
+          width={28}
+          height={28}
+          unoptimized
+          className="h-7 w-7 object-contain"
+        />
+      </span>
+    );
+  }
 
   if (method.id === "whatsapp") {
     return (
@@ -204,32 +221,42 @@ export function PaymentMethods({
       </div>
 
       {selected ? (
+        selected.id === "whatsapp" ? null : (
         <div className="border-t border-zinc-200 px-5 py-4">
           <p className="text-xs font-bold uppercase tracking-wide text-zinc-500">
             {selected.detailLabel}
           </p>
           {selected.detail ? (
-            <div className="mt-1 flex flex-wrap items-center gap-3">
-              <code className="min-w-0 break-all rounded bg-zinc-100 px-2 py-1 font-mono text-sm font-semibold text-zinc-900">
-                {selected.detail}
-              </code>
-              <CopyButton
-                value={selected.detail}
-                label="Copy address"
-                className="btn btn-outline shrink-0 text-xs"
-              />
-              {selected.href ? (
-                <a
-                  href={selected.href}
-                  target={selected.id === "cashapp" ? "_blank" : undefined}
-                  rel={
-                    selected.id === "cashapp" ? "noopener noreferrer" : undefined
-                  }
-                  className="text-xs font-semibold text-brand-700 underline hover:text-brand-900"
-                >
-                  {selected.hrefLabel ?? "Open"}
-                </a>
-              ) : null}
+            <div className="mt-1 space-y-2">
+              {selected.id === "bitcoin" ? (
+                <>
+                  <code className="block w-full min-w-0 break-all rounded bg-zinc-100 px-2 py-1 font-mono text-sm font-semibold text-zinc-900">
+                    {selected.detail}
+                  </code>
+                  <p className="text-xs text-zinc-700">
+                    Copy the Bitcoin address above, pay the exact amount, and send
+                    a screenshot of your payment to WhatsApp.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <CopyButton
+                      value={selected.detail}
+                      label="Copy address"
+                      className="btn btn-outline shrink-0 text-xs"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-wrap items-center gap-3">
+                  <code className="min-w-0 break-all rounded bg-zinc-100 px-2 py-1 font-mono text-sm font-semibold text-zinc-900">
+                    {selected.detail}
+                  </code>
+                  <CopyButton
+                    value={selected.detail}
+                    label="Copy address"
+                    className="btn btn-outline shrink-0 text-xs"
+                  />
+                </div>
+              )}
             </div>
           ) : (
             <p className="mt-1 rounded border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
@@ -248,6 +275,7 @@ export function PaymentMethods({
             </ul>
           ) : null}
         </div>
+        )
       ) : (
         <p className="border-t border-zinc-200 px-5 py-4 text-xs text-zinc-500">
           No payment method selected yet — choose one above and it will be
@@ -255,7 +283,7 @@ export function PaymentMethods({
         </p>
       )}
 
-      {action ? (
+      {action && value === "whatsapp" ? (
         <div className="border-t border-zinc-200 bg-zinc-50 px-5 py-4">
           {action}
         </div>

@@ -4,9 +4,9 @@ export const metadata = { title: "About Us" };
 
 export default function AboutPage() {
   return (
-    <InfoPage title="About Sovereign Arms" kicker="Built On Trust">
+    <InfoPage title="About CaliberGuns" kicker="Built On Trust">
       <p>
-        Sovereign Arms is a family-owned online firearms retailer serving
+        CaliberGuns is a family-owned online firearms retailer serving
         shooters, hunters and collectors. We combine a huge catalog of new and
         used guns with gunbroker-style auction listings and the parts depth of
         a specialty house.

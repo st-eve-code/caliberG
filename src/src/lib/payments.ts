@@ -9,6 +9,7 @@ export type PaymentMethodId =
   | "chime";
 
 export type PaymentMethod = {
+  logo?: string;
   id: PaymentMethodId;
   label: string;
   blurb: string;
@@ -45,6 +46,7 @@ export function formatPhone(raw: string) {
 export const paymentMethods: PaymentMethod[] = [
   {
     id: "whatsapp",
+    logo: "/assets/badges/whatsapp.svg",
     label: "WhatsApp",
     blurb: "Chat with us and pay however you like",
     flow: "chat",
@@ -53,27 +55,31 @@ export const paymentMethods: PaymentMethod[] = [
     notes: [
       "Start a chat and we'll confirm availability, shipping and payment with you directly.",
     ],
+    href: clean(config.whatsappNumber)
+      ? `https://wa.me/${clean(config.whatsappNumber).replace(/\D/g, "")}`
+      : undefined,
+    hrefLabel: "Chat on WhatsApp",
     tone: "bg-[#25D366]/15 text-[#128C7E] ring-[#25D366]/40",
   },
   {
     id: "bitcoin",
+    logo: "/assets/badges/bitcoin.svg",
     label: "Bitcoin",
     blurb: "Pay with BTC to our wallet address",
     flow: "offline",
     detailLabel: "Bitcoin wallet address",
     detail: clean(config.payments.bitcoinAddress),
-    notes: [
-      config.payments.bitcoinNetwork,
-      "Send the exact amount, then send your payment screenshot on WhatsApp.",
-    ],
+    notes: [config.payments.bitcoinNetwork],
     href: clean(config.payments.bitcoinAddress)
       ? `bitcoin:${clean(config.payments.bitcoinAddress)}`
       : undefined,
     hrefLabel: "Open wallet app",
     tone: "bg-amber-500/15 text-amber-700 ring-amber-500/30",
   },
+  /*
   {
     id: "applepay",
+    logo: "/assets/badges/applepay.svg",
     label: "Apple Pay",
     blurb: "Fast checkout from iPhone, iPad or Mac",
     flow: "offline",
@@ -90,6 +96,7 @@ export const paymentMethods: PaymentMethod[] = [
   },
   {
     id: "zelle",
+    logo: "/assets/badges/zelle.svg",
     label: "Zelle",
     blurb: "Send from your banking app",
     flow: "offline",
@@ -109,6 +116,7 @@ export const paymentMethods: PaymentMethod[] = [
   },
   {
     id: "cashapp",
+    logo: "/assets/badges/cashapp.svg",
     label: "Cash App",
     blurb: "Send instantly with your $cashtag",
     flow: "offline",
@@ -127,6 +135,7 @@ export const paymentMethods: PaymentMethod[] = [
   },
   {
     id: "chime",
+    logo: "/assets/badges/chime.svg",
     label: "Chime",
     blurb: "Pay from your Chime account",
     flow: "offline",
@@ -144,6 +153,7 @@ export const paymentMethods: PaymentMethod[] = [
     hrefLabel: "Email us",
     tone: "bg-indigo-500/15 text-indigo-700 ring-indigo-500/30",
   },
+  */
 ];
 
 export function getPaymentMethod(id: string | null | undefined) {

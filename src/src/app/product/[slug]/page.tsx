@@ -30,7 +30,7 @@ export async function generateMetadata({
   const p = getProductBySlug(slug);
   return {
     title: p ? `${p.brand} ${p.name}` : "Product",
-    description: p ? `${p.name} — ${p.price} at Sovereign Arms.` : undefined,
+    description: p ? `${p.name} — ${p.price} at CaliberGuns.` : undefined,
   };
 }
 

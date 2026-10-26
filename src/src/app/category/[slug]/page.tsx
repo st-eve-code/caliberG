@@ -74,7 +74,7 @@ export default async function CategoryPage({
       <Breadcrumbs crumbs={[{ name: "Shop", href: "/browse" }, { name: title }]} />
       <div className="mt-4 grid gap-8 lg:grid-cols-[240px_1fr]">
         <div className="hidden lg:block">
-          <div className="rounded-lg border border-zinc-200 bg-white p-5 lg:sticky lg:top-32 lg:self-start">
+          <div className="rounded-lg border border-zinc-200 bg-white p-5 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:self-start">
             <FilterSidebar filters={{ ...filters, category: slug !== "firearms" ? slug : undefined }} />
           </div>
         </div>

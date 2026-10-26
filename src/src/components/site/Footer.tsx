@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { footerGroups } from "@/lib/data/categories";
 import { NewsletterForm } from "@/components/ui/NewsletterForm";
-import { config } from "@/lib/config";
+import { config, formattedAddress } from "@/lib/config";
 
 const socials = [
   { name: "facebook", href: config.socials.facebook },
@@ -11,6 +11,13 @@ const socials = [
   { name: "x", href: config.socials.x },
   { name: "linkedin", href: config.socials.linkedin },
 ].filter((s) => s.href);
+
+const legalLinks = [
+  { name: "Shipping & Returns", href: "/shipping" },
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Terms & Conditions", href: "/terms" },
+  { name: "State Restrictions", href: "/state-restrictions" },
+];
 
 export function Footer() {
   return (
@@ -28,6 +35,91 @@ export function Footer() {
             </p>
           </div>
           <NewsletterForm />
+        </div>
+      </div>
+
+      {/* support / location / legal */}
+      <div className="border-b border-white/10">
+        <div className="container-x grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p className="mb-3 text-sm font-extrabold uppercase tracking-wider text-white">
+              Customer Support
+            </p>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href={config.phoneHref} className="hover:text-gold-400">
+                  {config.phone}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${config.supportEmail}`}
+                  className="break-all hover:text-gold-400"
+                >
+                  {config.supportEmail}
+                </a>
+              </li>
+              <li className="text-zinc-500">{config.supportHours}</li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="mb-3 text-sm font-extrabold uppercase tracking-wider text-white">
+              Visit Us
+            </p>
+            <address className="space-y-1 text-sm not-italic">
+              <p>{config.address.line1}</p>
+              {config.address.line2 ? <p>{config.address.line2}</p> : null}
+              <p>
+                {config.address.city}, {config.address.state}{" "}
+                {config.address.zip}
+              </p>
+              <p>{config.address.country}</p>
+            </address>
+            <a
+              href={`https://maps.google.com/?q=${encodeURIComponent(
+                formattedAddress
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-xs font-semibold text-gold-400 hover:underline"
+            >
+              Get directions
+            </a>
+          </div>
+
+          <div>
+            <p className="mb-3 text-sm font-extrabold uppercase tracking-wider text-white">
+              Legal
+            </p>
+            <ul className="space-y-2 text-sm">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="hover:text-gold-400">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="mb-3 text-sm font-extrabold uppercase tracking-wider text-white">
+              Order &amp; Pay
+            </p>
+            <p className="text-sm">
+              Every order is confirmed by hand. Message us on WhatsApp to place
+              an order or send payment confirmation.
+            </p>
+            <a
+              href={`https://wa.me/${config.whatsappNumber.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary mt-3 text-xs"
+            >
+              {config.whatsappLabel}
+            </a>
+          </div>
         </div>
       </div>
 

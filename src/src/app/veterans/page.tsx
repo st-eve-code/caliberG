@@ -5,7 +5,7 @@ export const metadata = { title: "Veterans & First Responder Discount" };
 export default function VeteransPage() {
   return (
     <InfoPage
-      title="Sovereign Arms Valor Program"
+      title="CaliberGuns Valor Program"
       kicker="Proud to Serve Those Who Serve"
       cta={{ href: "/contact", label: "Verify & Enroll" }}
     >

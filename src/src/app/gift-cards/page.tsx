@@ -10,7 +10,7 @@ export default function GiftCardsPage() {
       cta={{ href: "/browse", label: "Shop Gift Ideas" }}
     >
       <p>
-        Sovereign Arms gift cards are delivered by email, work on everything in
+        CaliberGuns gift cards are delivered by email, work on everything in
         the store, and never expire. They&apos;re the perfect gift for anyone who
         has ever said &ldquo;I&apos;ve been eyeing one of those.&rdquo;
       </p>

@@ -5,7 +5,7 @@ export const metadata = { title: "Careers" };
 export default function CareersPage() {
   return (
     <InfoPage
-      title="Careers at Sovereign Arms"
+      title="Careers at CaliberGuns"
       kicker="Join the Team"
       cta={{ href: "/contact", label: "Send a Resume" }}
     >

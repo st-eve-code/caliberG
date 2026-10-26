@@ -11,7 +11,7 @@ export default function SellPage() {
     >
       <p>
         Turn your firearms into cash. Sell us your guns outright or list them
-        on the Sovereign Arms auction board — you pick how fast you want to move
+        on the CaliberGuns auction board — you pick how fast you want to move
         them and what reserve you&apos;re comfortable with.
       </p>
       <p>
